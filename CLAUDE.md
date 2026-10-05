@@ -11,7 +11,7 @@ See README.md for the folder map and build commands.
   Hand edits to `site/**/*.html` or `site/assets/js/main.js` get overwritten on the next build.
 - `site/assets/css/style.css` is hand-written; the build never writes it, but every page inlines the CSS it
   uses, so **rebuild after editing style.css**.
-- `sitemap.xml` and `robots.txt` are not generated; edit them by hand.
+- `sitemap.xml`, `robots.txt` and `.htaccess` are generated too (`build/sitemap.py`, `build/redirects.py`).
 - After a build, `git diff --stat site/` should show only the pages you meant to change.
 - Python 3.10+ with Pillow and fontTools (`pip install pillow fonttools brotli`). Windows: `git config core.longpaths true` (two article slugs exceed MAX_PATH;
   the generator writes with the `\\?\` prefix).

@@ -1,10 +1,11 @@
 """Site build. Usage: python build/gen2.py
-Every page (including index.html) is rendered by skin_<x>_glass.py; sitemap.xml/robots.txt are left untouched."""
+Every page (including index.html) is rendered by skin_<x>_glass.py; sitemap.xml, robots.txt and .htaccess are generated too."""
 import os, re, sys, glob, json, shutil, importlib, html
 import gen  # content loading, image helper, writers
 import redirects
 import structured_data
 import critical
+import sitemap
 from gen import POSTS, LEGAL_HTML, post_body, Images, write, fmt_date, esc, SITE, FOLDERS, MANIFEST, REPO
 
 S = os.path.dirname(os.path.abspath(__file__))
@@ -201,6 +202,7 @@ def build(key):
     if hasattr(skin, "post_build"):
         skin.post_build(T, pages)
     redirects.build(T.dir)
+    sitemap.build(T.dir, T.base, pages)
     print(key, len(pages), "pages,", len(img.used), "images")
 
 
