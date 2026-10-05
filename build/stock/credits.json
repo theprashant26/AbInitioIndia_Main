@@ -1,0 +1,76 @@
+{
+ "india-gate": {
+  "id": 16960242,
+  "url": "https://www.pexels.com/photo/india-gate-in-new-delhi-at-sunset-16960242/",
+  "author": "Ravi Roshan",
+  "size": [
+   1920,
+   1440
+  ],
+  "kb": 126,
+  "q": 80
+ },
+ "boardroom": {
+  "id": 3906592,
+  "url": "https://www.pexels.com/photo/black-leather-office-rolling-chairs-beside-brown-wooden-table-3906592/",
+  "author": "Leandro Alamino",
+  "size": [
+   1920,
+   1280
+  ],
+  "kb": 123,
+  "q": 80
+ },
+ "conference": {
+  "id": 32168739,
+  "url": "https://www.pexels.com/photo/modern-conference-room-with-professional-setup-32168739/",
+  "author": "Fahad Puthawala",
+  "size": [
+   1920,
+   2879
+  ],
+  "kb": 185,
+  "q": 80
+ },
+ "meeting": {
+  "id": 7108454,
+  "url": "https://www.pexels.com/photo/employees-having-a-meeting-inside-the-conference-room-7108454/",
+  "author": "Tiger Lily",
+  "size": [
+   1920,
+   1280
+  ],
+  "kb": 118,
+  "q": 80
+ },
+ "india-gate-night": {
+  "id": 19927020,
+  "url": "https://www.pexels.com/photo/india-gate-in-new-delhi-at-night-19927020/",
+  "author": "Ranjeet Chauhan",
+  "size": [
+   1920,
+   1280
+  ],
+  "kb": 59
+ },
+ "secretariat": {
+  "id": 3881113,
+  "url": "https://www.pexels.com/photo/rashtrapati-bhavan-in-delhi-3881113/",
+  "author": "Maahid Photos",
+  "size": [
+   1920,
+   1280
+  ],
+  "kb": 191
+ },
+ "india-gate-sunset": {
+  "id": 6472566,
+  "url": "https://www.pexels.com/photo/people-near-the-india-gate-during-sunset-6472566/",
+  "author": "Saurabh Kumar",
+  "size": [
+   1728,
+   1600
+  ],
+  "kb": 181
+ }
+}
