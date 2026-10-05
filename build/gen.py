@@ -10,9 +10,9 @@ from site_data import *  # noqa
 
 SITE = "https://theprashant26.github.io/AbInitioIndia_Themes/"
 FOLDERS = {"B": "site"}
-# Absolute address of the site (canonical / og:url). Still the GitHub Pages preview;
-# switch to "https://abinitioindia.com/" at launch, then rebuild.
-BASE_URL = "https://theprashant26.github.io/AbInitioIndia_Themes/Theme-B-Brand-Blue/"
+# Absolute address of the site (canonical, og:url, og:image, JSON-LD, form redirect). Always the
+# live domain, also on the GitHub Pages preview, so search engines treat abinitioindia.com as the original.
+BASE_URL = "https://abinitioindia.com/"
 MANIFEST = json.load(open(os.path.join(CONTENT, "img-manifest.json")))
 esc = lambda s: html.escape(s, quote=True)
 
