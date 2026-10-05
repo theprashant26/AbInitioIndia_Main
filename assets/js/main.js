@@ -93,10 +93,13 @@
     var track = root.querySelector('[data-track]');
     var prev = root.querySelector('[data-prev]'), next = root.querySelector('[data-next]');
     if (!track || !prev || !next) return;
-    function step() { var it = track.querySelector('li'); return it ? it.getBoundingClientRect().width + 24 : track.clientWidth; }
-    function update() {
-      prev.disabled = track.scrollLeft < 4;
-      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    function step() {  // one card plus the flex gap, so each click lands on the next snap point
+      var it = track.querySelector('li');
+      return it ? it.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).columnGap) || 0) : track.clientWidth;
+    }
+    function update() {  // 8px tolerance: scroll-snap rests the first card a few px in (the track's padding)
+      prev.disabled = track.scrollLeft < 8;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8;
     }
     prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: reduce ? 'auto' : 'smooth' }); });
     next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: reduce ? 'auto' : 'smooth' }); });

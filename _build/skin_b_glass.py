@@ -55,7 +55,7 @@ def bento(ctx, R):
 
 def process(R):
     steps = "".join(f'<li class="step glass"><span class="step-no">{i:02d}</span><h3>{t}</h3><p>{d}</p></li>' for i, (t, d) in enumerate(PROCESS, 1))
-    return f"""<section class="sec process" aria-labelledby="how-h"><div class="container-xl">
+    return f"""<section class="sec process" aria-labelledby="how-h" data-carousel><div class="container-xl">
 <div class="process-head" data-reveal><div><span class="kicker">How we work</span><h2 id="how-h">A systematic approach, shaped around your business</h2><p>{PROCESS_INTRO}</p></div>
 <div class="carousel-btns"><button class="round-btn" type="button" data-prev aria-controls="processTrack"><span class="visually-hidden">Previous steps</span><i class="bi bi-arrow-left" aria-hidden="true"></i></button><button class="round-btn" type="button" data-next aria-controls="processTrack"><span class="visually-hidden">Next steps</span><i class="bi bi-arrow-right" aria-hidden="true"></i></button></div></div>
 <ol class="timeline" id="processTrack" data-track tabindex="0" aria-label="Advisory process steps">{steps}</ol>
@@ -256,7 +256,7 @@ def contact(ctx, R):
 <div class="col-lg-5"><div class="info-panel glass-strong" data-reveal><h2>Visit our office or simply send us an email</h2><p>{C["intro"]}</p>
 <ul class="info-list">{offices}{phones}
 <li><i class="bi bi-envelope" aria-hidden="true"></i><span><strong>Email</strong><a href="mailto:{EMAIL}">{EMAIL}</a></span></li>
-<li><i class="bi bi-whatsapp" aria-hidden="true"></i><span><strong>WhatsApp</strong><a href="{WHATSAPP}">+91 8800 808 022</a></span></li>
+<li><i class="bi bi-whatsapp" aria-hidden="true"></i><span><strong>WhatsApp</strong><a href="{WHATSAPP}" target="_blank" rel="noopener">+91 8800 808 022</a></span></li>
 <li><i class="bi bi-clock" aria-hidden="true"></i><span><strong>Available</strong>{C["hours"][0]}, {C["hours"][1]}</span></li></ul></div></div>
 <div class="col-lg-7"><div class="form-panel glass-strong" data-reveal><span class="kicker">Enquiry</span><h2>Send us an enquiry</h2><p>For any questions, please feel free to contact us.</p>{c.form(ctx, "btn-blue")}</div></div>
 </div>

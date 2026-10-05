@@ -59,6 +59,8 @@ def load_posts():
                     cur[0] = next(it)
                 return f"<{m.group(1)}h{cur[0]}"
             body = re.sub(r"<(/?)h[2-6]\b", heading, body)
+        # wide tables scroll sideways on phones (.prose table is overflow-x:auto): keyboard users need to reach them
+        body = body.replace("<table>", '<table tabindex="0">')
         before = body
         body = fix(body)
         p["typo_fixed"] = before != body

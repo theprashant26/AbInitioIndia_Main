@@ -5,6 +5,7 @@ from site_data import *  # noqa
 
 e = lambda s: html.escape(s, quote=True)
 AC = ' aria-current="page"'
+EXT = ' target="_blank" rel="noopener"'  # links that leave the site (WhatsApp, social) open in a new tab
 NAV = [("About us", [("About", "about.html"), ("Our team", "team.html"), ("Our mentors", "mentors.html")]),
        ("Our services", "services.html"), ("Insights", "insights.html"), ("Contact us", "contact.html")]
 ABOUT_GROUP = ("about.html", "team.html", "mentors.html")
@@ -49,7 +50,7 @@ def header(R, current, cta_label, cta_cls, variant=""):
 
 
 def footer(R, cta_btn_cls, cta_panel_cls="glass-strong", extra_cls=""):
-    social = "".join(f'<a href="{u}" aria-label="{n}"><i class="bi {i}" aria-hidden="true"></i></a>' for u, n, i in SOCIAL)
+    social = "".join(f'<a href="{u}" aria-label="{n}"{EXT}><i class="bi {i}" aria-hidden="true"></i></a>' for u, n, i in SOCIAL)
     legal = "".join(f'<li><a href="{R}{s}.html">{t}</a></li>' for s, _, t, _ in LEGAL)
     return f"""<footer class="site-footer {extra_cls}">
 <div class="container-xl">
@@ -62,13 +63,13 @@ def footer(R, cta_btn_cls, cta_panel_cls="glass-strong", extra_cls=""):
 <div class="footer-grid">
 <div class="footer-brand"><a class="brand" href="{R}index.html"><img src="{R}assets/img/logo.png" alt="Ab Initio India" width="150" height="71" loading="lazy"></a>
 <p>1011B, 10th Floor, Indraprakash Building,<br>21 Barakhamba Road, New Delhi – 110001</p></div>
-<div><h2 class="footer-h">Contact</h2><ul><li><a href="tel:{PHONE_TEL}"><i class="bi bi-telephone" aria-hidden="true"></i> {PHONE_DISPLAY}</a></li><li><a href="mailto:{EMAIL}"><i class="bi bi-envelope" aria-hidden="true"></i> {EMAIL}</a></li><li><a href="{WHATSAPP}"><i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp</a></li></ul></div>
+<div><h2 class="footer-h">Contact</h2><ul><li><a href="tel:{PHONE_TEL}"><i class="bi bi-telephone" aria-hidden="true"></i> {PHONE_DISPLAY}</a></li><li><a href="mailto:{EMAIL}"><i class="bi bi-envelope" aria-hidden="true"></i> {EMAIL}</a></li><li><a href="{WHATSAPP}"{EXT}><i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp</a></li></ul></div>
 <div><h2 class="footer-h">Company</h2><ul><li><a href="{R}about.html">About</a></li><li><a href="{R}team.html">Our team</a></li><li><a href="{R}services.html">Services</a></li><li><a href="{R}insights.html">Insights</a></li><li><a href="{R}faq.html">FAQ</a></li></ul></div>
 <div><h2 class="footer-h">Legal</h2><ul>{legal}</ul></div>
 </div>
 <div class="footer-bottom"><span>© 2026 Ab Initio India LLP. All rights reserved.</span><span class="social">{social}</span></div>
 </div></div></footer>
-<a class="wa-float" href="{WHATSAPP}" aria-label="Chat on WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a>"""
+<aside aria-label="WhatsApp"><a class="wa-float" href="{WHATSAPP}"{EXT} aria-label="Chat on WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a></aside>"""
 
 
 def crumbs(R, items, title, cls="crumbs"):
