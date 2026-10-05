@@ -10,8 +10,10 @@ Icons: instead of the 86 KB bootstrap-icons.min.css, each page inlines the rules
 build_icon_font() writes a WOFF2 holding only the icons used anywhere on the site (fonttools)."""
 import os, re
 
-ICON_CSS = os.path.join("assets", "vendor", "bootstrap-icons", "bootstrap-icons.min.css")
-ICON_FONT = os.path.join("assets", "vendor", "bootstrap-icons", "fonts", "bootstrap-icons.woff2")
+# full Bootstrap Icons, used only as the source here (not deployed)
+ICONS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vendor", "bootstrap-icons")
+ICON_CSS = os.path.join(ICONS, "bootstrap-icons.min.css")
+ICON_FONT = os.path.join(ICONS, "fonts", "bootstrap-icons.woff2")
 ICON_SUBSET = "assets/fonts/bootstrap-icons-subset.woff2"
 SHEETS = [os.path.join("assets", "vendor", "bootstrap.subset.min.css"), os.path.join("assets", "css", "style.css")]
 JS = [os.path.join("assets", "js", "main.js"), os.path.join("assets", "vendor", "bootstrap.bundle.min.js")]
@@ -101,13 +103,13 @@ def prune(css, words):
 
 # ------------------------------------------------------------------ icons
 def icon_map(site):
-    css = open(os.path.join(site, ICON_CSS), encoding="utf-8").read()
+    css = open(ICON_CSS, encoding="utf-8").read()
     return dict(re.findall(r'\.bi-([\w-]+)::before\{content:"\\([0-9a-f]+)"\}', css))
 
 
 def icon_css(site, names):
     """@font-face + base rule + one rule per icon used on the page (paths relative to the site root)."""
-    css = open(os.path.join(site, ICON_CSS), encoding="utf-8").read()
+    css = open(ICON_CSS, encoding="utf-8").read()
     base = re.search(r'\.bi::before,\[class\*=" bi-"\]::before,\[class\^=bi-\]::before\{[^}]*\}', css).group(0)
     face = ('@font-face{font-display:block;font-family:bootstrap-icons;'
             'src:url("{R}' + ICON_SUBSET + '") format("woff2")}')
@@ -127,7 +129,7 @@ def build_icon_font(site, names):
     logging.getLogger("fontTools").setLevel(logging.ERROR)  # the upstream font has a harmless post-table quirk
     m = icon_map(site)
     opts = subset.Options(); opts.flavor = "woff2"; opts.layout_features = []; opts.name_IDs = ["*"]; opts.notdef_outline = True
-    font = subset.load_font(os.path.join(site, ICON_FONT), opts)
+    font = subset.load_font(ICON_FONT, opts)
     s = subset.Subsetter(opts); s.populate(unicodes=[int(m[n], 16) for n in names]); s.subset(font)
     dst = os.path.join(site, ICON_SUBSET)
     os.makedirs(os.path.dirname(dst), exist_ok=True)

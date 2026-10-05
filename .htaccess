@@ -1,6 +1,9 @@
-# 301 redirects from the old WordPress URLs. Generated from build/redirects.csv by build/redirects.py:
+# 301 redirects from the old WordPress URLs. Generated from _build/redirects.csv by _build/redirects.py:
 # edit the CSV and rebuild instead of editing this file.
 <IfModule mod_alias.c>
+  # the generator, git data and docs live in the same folder as the site but are not part of it
+  RedirectMatch 404 "^/(_build|\.git)(/.*)?$"
+  RedirectMatch 404 "^/(README\.md|\.gitignore|CLAUDE\.md)$"
   RedirectMatch 301 "^/abcd/?$" "/insights/abcd.html"
   RedirectMatch 301 "^/acquisition\-sale\-of\-shares\-by\-overseas\-entity\-in\-india/?$" "/insights/acquisition-sale-of-shares-by-overseas-entity-in-india.html"
   RedirectMatch 301 "^/addressing\-valuation\-and\-financial\-disagreements\-building\-harmony\-for\-a\-sustainable\-partnership/?$" "/insights/addressing-valuation-and-financial-disagreements-building-harmony-for-a-sustainable-partnership.html"

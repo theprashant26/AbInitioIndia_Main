@@ -4,7 +4,7 @@ class Bootstrap's JS toggles at runtime. :root, @font-face, @keyframes and eleme
 import os, re, glob, sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # project root
-# Usage (from the project root): python build/purge.py site
+# Usage (from the project root): python _build/purge.py .
 RUNTIME = {"show", "showing", "hiding", "collapsing", "collapse", "collapsed", "fade", "active", "disabled",
            "dropdown-menu-end", "dropdown-menu-start", "dropup", "dropend", "dropstart", "dropdown-toggle",
            "dropdown-menu", "dropdown-item", "dropdown", "visually-hidden", "visually-hidden-focusable"}
@@ -64,7 +64,7 @@ def purge(css, used):
 if __name__ == "__main__":
     for folder in sys.argv[1:]:
         d = os.path.join(REPO, folder)
-        src = open(os.path.join(d, "assets", "vendor", "bootstrap.min.css"), encoding="utf-8").read()
+        src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "vendor", "bootstrap.min.css"), encoding="utf-8").read()  # full Bootstrap (source only)
         header = src[:src.index("*/") + 2] if src.startswith("/*") else ""
         body = src[len(header):]
         css = purge(re.sub(r"/\*.*?\*/", "", body, flags=re.S), used_classes(d))

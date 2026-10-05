@@ -1,4 +1,4 @@
-"""Site build. Usage: python build/gen2.py
+"""Site build. Usage: python _build/gen2.py
 Every page (including index.html) is rendered by skin_<x>_glass.py; sitemap.xml, robots.txt and .htaccess are generated too."""
 import os, re, sys, glob, json, shutil, importlib, html
 import gen  # content loading, image helper, writers
@@ -6,7 +6,7 @@ import redirects
 import structured_data
 import critical
 import sitemap
-from gen import POSTS, LEGAL_HTML, post_body, Images, write, fmt_date, esc, SITE, FOLDERS, MANIFEST, REPO
+from gen import POSTS, LEGAL_HTML, post_body, Images, write, fmt_date, esc, MANIFEST, REPO
 
 S = os.path.dirname(os.path.abspath(__file__))
 STOCK = os.path.join(S, "stock")
@@ -169,7 +169,7 @@ DEFAULT_ASSETS = """<link rel="preload" href="{R}assets/fonts/plus-jakarta-sans-
 
 class Theme:
     def __init__(self, key):
-        self.key = key; self.folder = FOLDERS[key]; self.dir = os.path.join(REPO, self.folder); self.base = gen.BASE_URL
+        self.key = key; self.dir = REPO; self.base = gen.BASE_URL  # the project root is the website
 
 
 def build(key):
