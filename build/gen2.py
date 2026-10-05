@@ -2,6 +2,7 @@
 Every page (including index.html) is rendered by skin_<x>_glass.py; sitemap.xml/robots.txt are left untouched."""
 import os, sys, json, shutil, importlib, html
 import gen  # content loading, image helper, writers
+import redirects
 from gen import POSTS, LEGAL_HTML, post_body, Images, write, fmt_date, esc, SITE, FOLDERS, MANIFEST, REPO
 
 S = os.path.dirname(os.path.abspath(__file__))
@@ -76,7 +77,7 @@ def default_assets(skin, R, preload):
 
 
 def shell(T, skin, page):
-    R = "../" if "/" in page["path"] else ""
+    R = page.get("root") or ("../" if "/" in page["path"] else "")
     site = getattr(skin, "CANONICAL_BASE", T.base)  # one constant: preview vs live domain
     url = site if page["path"] == "index.html" else site + page["path"]
     og = site + (page.get("og_image") or "assets/img/logo.png")
@@ -165,6 +166,7 @@ def build(key):
     shutil.copyfile(os.path.join(S, getattr(skin, "MAIN_JS", "main_glass.js")), os.path.join(T.dir, "assets", "js", "main.js"))
     if hasattr(skin, "post_build"):
         skin.post_build(T, pages)
+    redirects.build(T.dir)
     print(key, len(pages), "pages,", len(img.used), "images")
 
 

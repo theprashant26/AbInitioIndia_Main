@@ -44,8 +44,9 @@ def pages(ctx, S):
         body=S.faq(ctx, ""))
     for slug, title, _, desc in LEGAL:
         add(path=f"{slug}.html", title=title + SUFFIX, desc=desc, body=S.legal(ctx, "", slug, title))
+    # the server shows 404.html at any missing URL (e.g. /insights/a/b/), so its links are root-relative
     add(path="404.html", title="Page not found" + SUFFIX, desc="The page you are looking for could not be found.", noindex=True,
-        body=S.not_found(ctx, ""))
+        root="/", body=S.not_found(ctx, "/"))
     add(path="thank-you.html", title="Thank you" + SUFFIX, desc="Thank you for contacting Ab Initio India. Our team will get back to you shortly.", noindex=True,
         body=S.thanks(ctx, ""))
     return out
