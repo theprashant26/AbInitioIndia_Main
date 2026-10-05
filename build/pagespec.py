@@ -33,7 +33,7 @@ def pages(ctx, S):
     for i, p in enumerate(posts):
         newer = posts[i - 1] if i > 0 else None
         older = posts[i + 1] if i + 1 < len(posts) else None
-        add(path=f"insights/{p['slug']}.html", nav="insights/", title=p["title"] + SUFFIX, desc=p["desc"], og_type="article",
+        add(path=f"insights/{p['slug']}.html", nav="insights/", title=p["title"] + SUFFIX, desc=p["desc"], og_type="article", post=p,
             og_image="assets/img/" + img(p["img_key"])[0].split("assets/img/")[1],
             body=S.article(ctx, "../", p, newer, older))
     add(path="contact.html", title="Contact Us" + SUFFIX,

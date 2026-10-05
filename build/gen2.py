@@ -3,6 +3,7 @@ Every page (including index.html) is rendered by skin_<x>_glass.py; sitemap.xml/
 import os, sys, json, shutil, importlib, html
 import gen  # content loading, image helper, writers
 import redirects
+import structured_data
 from gen import POSTS, LEGAL_HTML, post_body, Images, write, fmt_date, esc, SITE, FOLDERS, MANIFEST, REPO
 
 S = os.path.dirname(os.path.abspath(__file__))
@@ -100,7 +101,7 @@ def shell(T, skin, page):
 <meta property="og:image" content="{esc(og)}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{R}assets/img/logo.png">{skin_head(skin, R, page)}
-{default_assets(skin, R, preload)}
+{default_assets(skin, R, preload)}{page.get("jsonld", "")}
 </head>
 <body class="{page.get('body_cls', 'page-inner')}">
 {skin.backdrop(R, page)}
@@ -158,6 +159,10 @@ def build(key):
                   preload=getattr(skin, "HOME_PRELOAD", ""))]
     pages += pagespec.pages(ctx, skin)
     for p in pages:
+        if p["path"] in ("index.html", "about.html", "contact.html"):
+            p["jsonld"] = structured_data.organization(T.base, HOME_DESC)
+        elif p.get("post"):
+            p["jsonld"] = structured_data.article(T.base, p, p["post"])
         if p["path"] == "404.html" or p["path"] == "thank-you.html":
             p["body_cls"] = "page-center"
         write(os.path.join(T.dir, p["path"]), shell(T, skin, p))

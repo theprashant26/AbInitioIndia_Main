@@ -43,6 +43,7 @@ server/  Web-server snippets for the host (nginx redirects). Not uploaded.
 | `stock/` | Licensed stock photos (credits in `stock/credits.json`) |
 | `clients_src/` | Client logos (source files) |
 | `main_glass.js` | Site JavaScript (menu, reveals, insights filter, form validation, parallax…) |
+| `structured_data.py` | JSON-LD: ProfessionalService (home, about, contact) and Article (every insight), built from `site_data.py` |
 | `redirects.csv` | Old WordPress URL → new page (83 rows; `exact` or `prefix` match) |
 | `redirects.py` | Writes `site/.htaccess` and `server/nginx-redirects.conf` from `redirects.csv` (run by `gen2.py`) |
 | `purge.py` | Rebuilds `site/assets/vendor/bootstrap.subset.min.css` from the classes the pages use |
