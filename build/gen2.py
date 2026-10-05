@@ -1,9 +1,10 @@
 """Site build. Usage: python build/gen2.py
 Every page (including index.html) is rendered by skin_<x>_glass.py; sitemap.xml/robots.txt are left untouched."""
-import os, sys, json, shutil, importlib, html
+import os, re, sys, glob, json, shutil, importlib, html
 import gen  # content loading, image helper, writers
 import redirects
 import structured_data
+import critical
 from gen import POSTS, LEGAL_HTML, post_body, Images, write, fmt_date, esc, SITE, FOLDERS, MANIFEST, REPO
 
 S = os.path.dirname(os.path.abspath(__file__))
@@ -39,6 +40,8 @@ class GlassImages(Images):
         return f'<img{c} src="{src}" alt="{esc(alt)}" width="{w}" height="{h}" loading="lazy">'
 
     def srcset_tag(self, key, R, alt, widths=(640, 960, 1400), sizes="100vw", cls=None, eager=False, extra=""):
+        # never upscale, and list each real width once (a narrow original would repeat its own width)
+        widths = sorted({min(wd, MANIFEST[key]["w"]) for wd in widths})
         parts = []
         for wd in widths:
             src, w, h = self.variant(key, wd, R); parts.append(f"{src} {w}w")
@@ -48,6 +51,10 @@ class GlassImages(Images):
 
     def copy_variants(self):
         from PIL import Image as PI
+        vdir = os.path.join(self.dir, "assets", "img", "v")
+        for old in glob.glob(os.path.join(vdir, "**", "*.webp"), recursive=True):  # v/ is build output only
+            if os.path.relpath(old, os.path.join(self.dir, "assets", "img")).replace(os.sep, "/") not in self.variants:
+                os.remove(old)
         for rel, (m, width) in self.variants.items():
             dst = os.path.join(self.dir, "assets", "img", rel)
             if os.path.exists(dst):
@@ -74,7 +81,7 @@ def skin_head(skin, R, page):
 def default_assets(skin, R, preload):
     if hasattr(skin, "head_assets"):
         return ""
-    return DEFAULT_ASSETS.replace("{R}", R) + preload.replace("{R}", R)
+    return DEFAULT_ASSETS.replace("{PRELOAD}", LCP_SLOT + preload).replace("{R}", R)
 
 
 def shell(T, skin, page):
@@ -135,11 +142,27 @@ def client_logos(T):
         else: im.save(base + ".jpg", quality=85, optimize=True)
 
 
-DEFAULT_ASSETS = """<link rel="preload" href="{R}assets/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{R}assets/vendor/bootstrap-icons/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="{R}assets/vendor/bootstrap-icons/bootstrap-icons.min.css"></noscript>
-<link rel="stylesheet" href="{R}assets/vendor/bootstrap.subset.min.css">
-<link rel="stylesheet" href="{R}assets/css/style.css">
+# The page's CSS is inlined at CRITICAL_SLOT (critical.py); the full stylesheets load without blocking
+# rendering and come first, so the inlined rules keep their order over them.
+CRITICAL_SLOT = "<!-- critical-css -->"
+LCP_SLOT = "<!-- lcp-preload -->"
+
+
+def lcp_preload(html):
+    """Preload the page's first fetchpriority="high" image (its LCP) with the same srcset/sizes as the <img>."""
+    m = re.search(r'<img\b[^>]*\bfetchpriority="high"[^>]*>', html.split("<body", 1)[1])
+    if not m:
+        return ""
+    a = dict(re.findall(r'\b(src|srcset|sizes)="([^"]*)"', m.group(0)))
+    extra = f' imagesrcset="{a["srcset"]}" imagesizes="{a["sizes"]}"' if "srcset" in a else ""
+    return f'\n<link rel="preload" as="image" href="{a["src"]}"{extra} fetchpriority="high">'
+
+
+DEFAULT_ASSETS = """<link rel="preload" href="{R}assets/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>{PRELOAD}
+<link rel="stylesheet" href="{R}assets/vendor/bootstrap.subset.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{R}assets/css/style.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="{R}assets/vendor/bootstrap.subset.min.css"><link rel="stylesheet" href="{R}assets/css/style.css"></noscript>
+<!-- critical-css -->
 <script>(function(d){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;d.classList.add('motion');setTimeout(function(){d.classList.add('reveal-done')},1500)})(document.documentElement)</script>"""
 
 
@@ -157,6 +180,9 @@ def build(key):
     pages = [dict(path="index.html", title=HOME_META[key], desc=HOME_DESC, body_cls="page-home", body=skin.home(ctx, ""),
                   preload=getattr(skin, "HOME_PRELOAD", ""))]
     pages += pagespec.pages(ctx, skin)
+    # main.js first: critical.py reads it for the classes it adds at runtime
+    shutil.copyfile(os.path.join(S, getattr(skin, "MAIN_JS", "main_glass.js")), os.path.join(T.dir, "assets", "js", "main.js"))
+    crit, icons = critical.Critical(T.dir), set()
     for p in pages:
         if p["path"] in ("index.html", "about.html", "contact.html"):
             p["jsonld"] = structured_data.organization(T.base, HOME_DESC)
@@ -164,10 +190,14 @@ def build(key):
             p["jsonld"] = structured_data.article(T.base, p, p["post"])
         if p["path"] == "404.html" or p["path"] == "thank-you.html":
             p["body_cls"] = "page-center"
-        write(os.path.join(T.dir, p["path"]), shell(T, skin, p))
+        html = shell(T, skin, p)
+        R = p.get("root") or ("../" if "/" in p["path"] else "")
+        html = html.replace(CRITICAL_SLOT, "<style>" + crit.css(html, R) + "</style>", 1).replace(LCP_SLOT, lcp_preload(html), 1)
+        icons |= critical.icons_used(html, T.dir)
+        write(os.path.join(T.dir, p["path"]), html)
     img.copy(); img.copy_variants(); client_logos(T)
     shutil.copyfile(os.path.join(S, "ScrollTrigger.min.js"), os.path.join(T.dir, "assets", "vendor", "ScrollTrigger.min.js"))
-    shutil.copyfile(os.path.join(S, getattr(skin, "MAIN_JS", "main_glass.js")), os.path.join(T.dir, "assets", "js", "main.js"))
+    critical.build_icon_font(T.dir, icons | critical.icons_used(crit.js, T.dir))
     if hasattr(skin, "post_build"):
         skin.post_build(T, pages)
     redirects.build(T.dir)

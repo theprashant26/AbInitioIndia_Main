@@ -192,15 +192,23 @@ class Images:
             shutil.copyfile(os.path.join(CONTENT, "img", f), dst)
 
 
+FIGURE_SIZES = "(min-width: 1400px) 760px, (min-width: 992px) 66vw, (min-width: 576px) 85vw, 76vw"
+
+
 def post_body(p, R, img):
     """Article body with local image paths; returns (body_html, featured_in_body)."""
     body = p["body"]; featured_in_body = False
     for src, key in p["body_img_keys"]:
         if key == p["img_key"]:
             featured_in_body = True
-        local, w, h = img(key, R)
-        body = re.sub(r'<img alt="([^"]*)" src="' + re.escape(src) + '"/?>',
-                      lambda m: f'<img src="{local}" alt="{esc(m.group(1) or p["title"])}" width="{w}" height="{h}" loading="lazy">', body)
+        if hasattr(img, "srcset_tag"):  # responsive WebP variants; the featured image is the page's LCP
+            lead = key == p["img_key"]
+            tag = lambda m: img.srcset_tag(key, R, m.group(1) or p["title"], (480, 800, 1200), FIGURE_SIZES,
+                                           eager=lead, extra=' fetchpriority="high"' if lead else "")
+        else:
+            local, w, h = img(key, R)
+            tag = lambda m: f'<img src="{local}" alt="{esc(m.group(1) or p["title"])}" width="{w}" height="{h}" loading="lazy">'
+        body = re.sub(r'<img alt="([^"]*)" src="' + re.escape(src) + '"/?>', tag, body)
     return body, featured_in_body
 
 

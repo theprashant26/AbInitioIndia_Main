@@ -62,11 +62,17 @@ def process(R):
 </div></section>"""
 
 
-def ins_card(ctx, R, p, h="h3"):
+CARD_SIZES = "(min-width: 1400px) 410px, (min-width: 992px) 31vw, (min-width: 768px) 46vw, 88vw"
+FIGURE_SIZES = "(min-width: 1400px) 760px, (min-width: 992px) 66vw, (min-width: 576px) 85vw, 76vw"
+HIGH = ' fetchpriority="high"'  # the page's main (LCP) image
+
+
+def ins_card(ctx, R, p, h="h3", eager=False, high=False):
     ctx["img"](p["img_key"], R)
     url = f'{R}insights/{p["slug"]}.html'
     cats = "|".join(p["cats"])
-    return (f'<article class="ins-card" data-cats="{e(cats)}"><a class="ins-media" href="{url}" tabindex="-1" aria-hidden="true">{ctx["img"].thumb_tag(p["img_key"], R)}</a>'
+    thumb = ctx["img"].srcset_tag(p["img_key"], R, "", (400, 640), CARD_SIZES, eager=eager, extra=HIGH if high else "")
+    return (f'<article class="ins-card" data-cats="{e(cats)}"><a class="ins-media" href="{url}" tabindex="-1" aria-hidden="true">{thumb}</a>'
             f'<div class="ins-body"><p class="ins-meta"><span class="tag">{p["cat"]}</span><time datetime="{p["date"]}">{ctx["fmt_date"](p["date"])}</time></p>'
             f'<{h}><a href="{url}">{e(p["title"])}</a></{h}></div></article>')
 
@@ -199,7 +205,7 @@ def service(ctx, R, s):
     return f"""{banner(R, s["title"], [("Our services", "services.html")], s["blurb"], icon=s["icon"])}
 <section class="sec pt-4"><div class="container-xl"><div class="row g-4 g-lg-5">
 <div class="col-lg-8"><div class="reading-card">
-<figure class="reading-figure">{img.tag("services/" + s["slug"], R, html.unescape(s["title"]) + " – Ab Initio India", eager=True)}</figure>
+<figure class="reading-figure">{img.srcset_tag("services/" + s["slug"], R, html.unescape(s["title"]) + " – Ab Initio India", (480, 800, 1200), FIGURE_SIZES, eager=True, extra=HIGH)}</figure>
 {intro_h}{lead}
 <div class="prose">{s["body"]}</div>
 </div>{quote_card(s["quote"], "mt-4")}</div>
@@ -221,14 +227,14 @@ def insights(ctx, R):
 <section class="sec pt-4"><div class="container-xl">
 <div class="filter-bar glass" data-filter="#insGrid" role="group" aria-label="Filter articles by category">{btns}</div>
 <p class="filter-status" data-filter-status aria-live="polite">{len(posts)} articles</p>
-<div class="ins-grid" id="insGrid">{"".join(ins_card(ctx, R, p, "h2") for p in posts)}</div>
+<div class="ins-grid" id="insGrid">{"".join(ins_card(ctx, R, p, "h2", eager=i == 0, high=i == 0) for i, p in enumerate(posts))}</div>
 </div></section>"""
 
 
 def article(ctx, R, p, newer, older):
     img = ctx["img"]
     body, featured_in_body = ctx["post_body"](p, R, img)
-    fig = "" if featured_in_body else f'<figure class="art-figure">{img.tag(p["img_key"], R, p["title"], eager=True)}</figure>'
+    fig = "" if featured_in_body else f'<figure class="art-figure">{img.srcset_tag(p["img_key"], R, p["title"], (480, 800, 1200), FIGURE_SIZES, eager=True, extra=HIGH)}</figure>'
     meta = "".join(f'<span class="tag">{x}</span>' for x in p["cats"]) + f'<time datetime="{p["date"]}">{ctx["fmt_date"](p["date"])}</time>'
     return f"""{banner(R, e(p["title"]), [("Insights", "insights.html")], meta=meta, small=True)}
 <section class="sec pt-4"><div class="container-xl"><article class="reading-card article">

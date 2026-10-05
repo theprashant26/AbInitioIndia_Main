@@ -13,6 +13,34 @@ REPO = os.path.dirname(S)
 SRC = os.path.join(S, "redirects.csv")
 
 
+# Compression and browser caching. Asset file names are not fingerprinted, so CSS/JS are cached for a week
+# (changes reach visitors within days) and HTML is always revalidated.
+PERFORMANCE = """# Compression and caching
+AddType font/woff2 .woff2
+AddType image/webp .webp
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript text/javascript application/json application/xml image/svg+xml
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 week"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 month"
+</IfModule>
+"""
+
+NGINX_PERFORMANCE = r"""#    gzip on; gzip_types text/css application/javascript application/json image/svg+xml text/plain text/xml;
+#    location ~* \.(?:css|js)$ { expires 7d; }
+#    location ~* \.(?:webp|jpe?g|png|woff2)$ { expires 30d; }
+#    location ~* \.html$ { add_header Cache-Control "no-cache"; }
+"""
+
+
 def pattern(old, match):
     base = re.escape(old.rstrip("/")) if old != "/" else ""
     return f"^{base}(/.*)?$" if match == "prefix" else f"^{base}/?$"
@@ -30,7 +58,7 @@ def build(site_dir=os.path.join(REPO, "site")):
           "# edit the CSV and rebuild instead of editing this file.",
           "<IfModule mod_alias.c>"]
     ht += [f'  RedirectMatch 301 "{pattern(r["old_path"], r["match"])}" "{r["new_path"]}"' for r in rows]
-    ht += ["</IfModule>", "", "# Friendly error page", "ErrorDocument 404 /404.html", ""]
+    ht += ["</IfModule>", "", "# Friendly error page", "ErrorDocument 404 /404.html", "", PERFORMANCE]
     with open(os.path.join(site_dir, ".htaccess"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(ht))
 
@@ -42,7 +70,9 @@ def build(site_dir=os.path.join(REPO, "site")):
     ng += ["}", "",
            "# 2) Inside the server { } block for abinitioindia.com:",
            "#    if ($abinitio_redirect) { return 301 $abinitio_redirect; }",
-           "#    error_page 404 /404.html;", ""]
+           "#    error_page 404 /404.html;",
+           "# 3) Compression and caching (same policy as site/.htaccess), also inside server { }:",
+           NGINX_PERFORMANCE]
     os.makedirs(os.path.join(REPO, "server"), exist_ok=True)
     with open(os.path.join(REPO, "server", "nginx-redirects.conf"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(ng))

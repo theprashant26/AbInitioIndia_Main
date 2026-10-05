@@ -23,7 +23,7 @@ server/  Web-server snippets for the host (nginx redirects). Not uploaded.
 | `services/*.html` | 8 service pages |
 | `insights/*.html` | 38 articles (slugs match the old WordPress site) |
 | privacy, disclaimer, terms, cookie, accessibility pages, `404.html`, `thank-you.html` | Legal and utility pages |
-| `assets/css/style.css` | **Hand-written** stylesheet (the generator does not touch it) |
+| `assets/css/style.css` | **Hand-written** stylesheet (the generator reads it, never writes it; see *Critical CSS*) |
 | `assets/js/main.js` | **Generated**: copied from `build/main_glass.js` on every build |
 | `assets/fonts/` | Plus Jakarta Sans variable WOFF2 (latin + latin-ext) and its licence (SIL OFL) |
 | `assets/vendor/` | Bootstrap (full + purged subset), Bootstrap Icons, GSAP, ScrollTrigger |
@@ -47,11 +47,12 @@ server/  Web-server snippets for the host (nginx redirects). Not uploaded.
 | `structured_data.py` | JSON-LD: ProfessionalService (home, about, contact) and Article (every insight), built from `site_data.py` |
 | `redirects.csv` | Old WordPress URL → new page (83 rows; `exact` or `prefix` match) |
 | `redirects.py` | Writes `site/.htaccess` and `server/nginx-redirects.conf` from `redirects.csv` (run by `gen2.py`) |
+| `critical.py` | Per-page inlined CSS and the icon-font subset (see *Critical CSS*) |
 | `purge.py` | Rebuilds `site/assets/vendor/bootstrap.subset.min.css` from the classes the pages use |
 
 ## Making changes
 
-Needs Python 3.10+ and Pillow (`pip install pillow`).
+Needs Python 3.10+, Pillow and fontTools (`pip install pillow fonttools brotli`).
 
 ```bash
 # 1. edit content (build/content/…), templates (build/skin_b_glass.py) or JS (build/main_glass.js)
@@ -59,7 +60,7 @@ python build/gen2.py               # 2. rebuild all pages into site/
 python build/purge.py site         # 3. only if you used new Bootstrap classes
 ```
 
-* Styling: edit `site/assets/css/style.css` directly (no rebuild needed).
+* Styling: edit `site/assets/css/style.css`, then **rebuild**: every page inlines the CSS it uses.
 * New team member: add an entry to `TEAM` in `build/content/site_data.py`, put a 600×500 JPG on
   a white background in `build/content/img/team/<slug>.jpg`, add it to `img-manifest.json`, rebuild.
 * Absolute URLs (canonical, og:url) come from `BASE_URL` in `build/gen.py`.
@@ -83,6 +84,17 @@ latin file; the latin-ext file (e.g. for ₹) only downloads where it is needed.
 is set in Arial scaled to the same metrics (the `"Plus Jakarta Sans fallback"` faces in section 0 of
 `style.css`), so the swap does not move the layout. Avoid `ch` units for widths: they depend on which
 font is showing.
+
+## Critical CSS and images
+* Each page inlines the CSS it can use (Bootstrap subset + icon rules + `style.css`, pruned to the classes,
+  ids and attributes on that page or added by the site JavaScript) in a `<style>` in `<head>`, so it renders
+  without waiting for a stylesheet. The full `bootstrap.subset.min.css` and `style.css` still load without
+  blocking, as a safety net. **After editing `style.css`, rebuild**, or pages keep the old inlined rules.
+* Icons: pages inline only the Bootstrap Icons they use, and `assets/fonts/bootstrap-icons-subset.woff2`
+  (built from `assets/vendor/bootstrap-icons/`) holds just the icons used site-wide (3 KB instead of 130 KB).
+  A new `bi-*` icon in a template is picked up automatically on the next build.
+* Images: insight cards, article and service images use resized WebP variants (`srcset`); each page's main
+  image (hero, first insight card, article or service image) has `fetchpriority="high"` and is preloaded.
 
 ## Notes
 * **Windows long paths:** two article file names are very long. Run `git config core.longpaths true`.
