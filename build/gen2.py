@@ -74,7 +74,7 @@ def skin_head(skin, R, page):
 def default_assets(skin, R, preload):
     if hasattr(skin, "head_assets"):
         return ""
-    return DEFAULT_ASSETS.replace("{R}", R).replace("{FONTS}", skin.FONTS) + preload.replace("{R}", R)
+    return DEFAULT_ASSETS.replace("{R}", R) + preload.replace("{R}", R)
 
 
 def shell(T, skin, page):
@@ -135,10 +135,9 @@ def client_logos(T):
         else: im.save(base + ".jpg", quality=85, optimize=True)
 
 
-DEFAULT_ASSETS = """<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="{FONTS}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+DEFAULT_ASSETS = """<link rel="preload" href="{R}assets/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{R}assets/vendor/bootstrap-icons/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link href="{FONTS}" rel="stylesheet"><link rel="stylesheet" href="{R}assets/vendor/bootstrap-icons/bootstrap-icons.min.css"></noscript>
+<noscript><link rel="stylesheet" href="{R}assets/vendor/bootstrap-icons/bootstrap-icons.min.css"></noscript>
 <link rel="stylesheet" href="{R}assets/vendor/bootstrap.subset.min.css">
 <link rel="stylesheet" href="{R}assets/css/style.css">
 <script>(function(d){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;d.classList.add('motion');setTimeout(function(){d.classList.add('reveal-done')},1500)})(document.documentElement)</script>"""

@@ -5,7 +5,6 @@ import common as c
 from common import e, AC
 
 THEME_COLOR = "#eaf2fb"
-FONTS = "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
 
 
 def backdrop(R, page):
