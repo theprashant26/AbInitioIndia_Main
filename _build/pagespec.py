@@ -37,7 +37,7 @@ def pages(ctx, S):
             og_image="assets/img/" + img(p["img_key"])[0].split("assets/img/")[1],
             body=S.article(ctx, "../", p, newer, older))
     add(path="contact.html", title="Contact Us" + SUFFIX,
-        desc="Contact Ab Initio India LLP, Indraprakash Building, 21 Barakhamba Road, New Delhi. Call +011-40393888, email mail@abinitioindia.com or send us an enquiry.",
+        desc="Contact Ab Initio India LLP, Indraprakash Building, 21 Barakhamba Road, New Delhi. Call +91-11-40393888, email mail@abinitioindia.com or send us an enquiry.",
         body=S.contact(ctx, ""))
     add(path="faq.html", title="Frequently Asked Questions" + SUFFIX,
         desc="Answers to common questions about Ab Initio India's business advisory process, pricing, setting up a business in India, funding support and article submissions.",

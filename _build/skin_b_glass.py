@@ -79,7 +79,7 @@ def ins_card(ctx, R, p, h="h3", eager=False, high=False):
 
 def side_cta(R):
     return f"""<div class="side-cta glass-sun"><h2>Book a consultation</h2><p>Tell us what you need and our team will get back to you.</p>
-<a class="btn btn-blue" href="{R}contact.html">Contact us</a><a class="side-tel" href="tel:{PHONE_TEL}"><i class="bi bi-telephone" aria-hidden="true"></i> {PHONE_DISPLAY}</a></div>"""
+<a class="btn btn-blue" href="{R}contact.html">Contact Us</a><a class="side-tel" href="tel:{PHONE_TEL}"><i class="bi bi-telephone" aria-hidden="true"></i> {PHONE_DISPLAY}</a></div>"""
 
 
 # ------------------------------------------------------------------ home
@@ -104,7 +104,7 @@ def home(ctx, R):
 <p>Trusted by leading brands across India</p><ul class="logo-row">{c.clients(R)}</ul></div></div></section>
 
 <section class="sec" aria-labelledby="svc-h"><div class="container-xl">
-<div class="split-head" data-reveal><div><span class="kicker">Our services</span><h2 id="svc-h">{HOME["svc_h"]}</h2></div><p>{HOME["svc_p"]} <a class="link-arrow" href="{R}services.html">All services <i class="bi bi-arrow-right" aria-hidden="true"></i></a></p></div>
+<div class="split-head" data-reveal><div><span class="kicker">Our Services</span><h2 id="svc-h">{HOME["svc_h"]}</h2></div><p>{HOME["svc_p"]} <a class="link-arrow" href="{R}services.html">All services <i class="bi bi-arrow-right" aria-hidden="true"></i></a></p></div>
 {bento(ctx, R)}
 </div></section>
 
@@ -131,7 +131,7 @@ def about(ctx, R):
     deals = "".join(f'<li class="deal"><span class="deal-no">{i:02d}</span><h3>{t}</h3><p>{d}</p></li>' for i, (t, d) in enumerate(A["deals"], 1))
     tags = "".join(f'<li>{t}</li>' for t in A["deals_tags"])
     quotes = "".join(quote_card(k) for k in A["testimonials"])
-    return f"""{banner(R, "About us", [], A["kicker"])}
+    return f"""{banner(R, "About Us", [], A["kicker"])}
 <section class="sec pt-4"><div class="container-xl"><div class="row g-4 g-lg-5 align-items-center">
 <div class="col-lg-6" data-reveal><span class="kicker">Who we are</span><h2>{A["intro_h"]}</h2><p class="lead-sm">{A["intro"]}</p>{quote_card("dinesh", "mt-4")}</div>
 <div class="col-lg-6" data-reveal><figure class="frame glass">{img.tag("pages/about", R, "Workspace with a laptop and business magazines")}</figure></div>
@@ -163,7 +163,7 @@ def team(ctx, R):
         cards.append(f'<article class="person" data-reveal><div class="person-photo">{img.tag("team/" + slug, R, name)}<span class="role-chip">{role}</span></div>'
                      f'<div class="person-body"><h3>{name}</h3>{tl}{"".join(f"<p>{p}</p>" for p in bio)}</div></article>')
     h, _ = TEAM_INTRO
-    return f"""{banner(R, "Our team", [("About us", "about.html")], "Our team is comprised of genuinely gifted minds.")}
+    return f"""{banner(R, "Our Team", [("About Us", "about.html")], "Our team is comprised of genuinely gifted minds.")}
 <section class="sec pt-4"><div class="container-xl">
 {head("The people", h, "Our expertise across diverse practice areas and sectors covers varied and nuanced needs.")}
 {lead_card}
@@ -178,7 +178,7 @@ def mentors(ctx, R):
         rows.append(f'<article class="mentor glass-strong{" is-flip" if i % 2 else ""}" data-reveal><div class="mentor-photo">{img.tag("mentors/" + slug, R, name)}</div>'
                     f'<div class="mentor-body"><span class="role-chip">Mentor</span><h3>{name}</h3>{"".join(f"<p>{p}</p>" for p in bio)}{x}</div></article>')
     h, p = MENTORS_INTRO
-    return f"""{banner(R, "Our mentors", [("About us", "about.html")], p)}
+    return f"""{banner(R, "Our Mentors", [("About Us", "about.html")], p)}
 <section class="sec pt-4"><div class="container-xl">
 {head("Mentors", h, "Our expertise across diverse practice areas and sectors covers varied and nuanced needs.")}
 <div class="mentors">{"".join(rows)}</div>
@@ -187,7 +187,7 @@ def mentors(ctx, R):
 
 def services(ctx, R):
     vals = "".join(f'<li><strong>{t}</strong><span>{d}</span></li>' for t, d in VALUES)
-    return f"""{banner(R, "Our services", [], "Our expertise across diverse practice areas and sectors covers varied and nuanced needs.")}
+    return f"""{banner(R, "Our Services", [], "Our expertise across diverse practice areas and sectors covers varied and nuanced needs.")}
 <section class="sec pt-4"><div class="container-xl">
 <div class="split-head" data-reveal><div><span class="kicker">Practice areas</span><h2>All the solutions you need, under one roof</h2></div><p>Your requirements are manifold, and so is our experience.</p></div>
 {bento(ctx, R)}
@@ -202,14 +202,14 @@ def service(ctx, R, s):
     img = ctx["img"]
     intro_h = f'<h2 class="h-intro">{s["intro_h"]}</h2>' if s.get("intro_h") else ""
     lead = "".join(f'<p class="lead-sm">{p}</p>' for p in s["lead"])
-    return f"""{banner(R, s["title"], [("Our services", "services.html")], s["blurb"], icon=s["icon"])}
+    return f"""{banner(R, s["title"], [("Our Services", "services.html")], s["blurb"], icon=s["icon"])}
 <section class="sec pt-4"><div class="container-xl"><div class="row g-4 g-lg-5">
 <div class="col-lg-8"><div class="reading-card">
 <figure class="reading-figure">{img.srcset_tag("services/" + s["slug"], R, html.unescape(s["title"]) + " – Ab Initio India", (480, 800, 1200), FIGURE_SIZES, eager=True, extra=HIGH)}</figure>
 {intro_h}{lead}
 <div class="prose">{s["body"]}</div>
 </div>{quote_card(s["quote"], "mt-4")}</div>
-<aside class="col-lg-4"><div class="side"><div class="side-card glass-strong"><h2>Our services</h2><ul class="side-nav">{c.services_nav(R, s)}</ul></div>{side_cta(R)}</div></aside>
+<aside class="col-lg-4"><div class="side"><div class="side-card glass-strong"><h2>Our Services</h2><ul class="side-nav">{c.services_nav(R, s)}</ul></div>{side_cta(R)}</div></aside>
 </div></div></section>"""
 
 
@@ -251,7 +251,7 @@ def contact(ctx, R):
     C = CONTACT
     offices = "".join(f'<li><i class="bi bi-geo-alt" aria-hidden="true"></i><span><strong>{n}</strong>{a}</span></li>' for n, a in C["offices"])
     phones = "".join(f'<li><i class="bi bi-telephone" aria-hidden="true"></i><span><strong>{l}</strong><a href="tel:{t}">{d}</a></span></li>' for l, d, t in C["phones"])
-    return f"""{banner(R, "Contact us", [], C["lead"])}
+    return f"""{banner(R, "Contact Us", [], C["lead"])}
 <section class="sec pt-4"><div class="container-xl"><div class="row g-4">
 <div class="col-lg-5"><div class="info-panel glass-strong" data-reveal><h2>Visit our office or simply send us an email</h2><p>{C["intro"]}</p>
 <ul class="info-list">{offices}{phones}
@@ -268,7 +268,7 @@ def faq(ctx, R):
     return f"""{banner(R, "Frequently asked questions", [], "Answers to the questions we are asked most often.")}
 <section class="sec pt-4"><div class="container-xl"><div class="row g-4 g-lg-5">
 <div class="col-lg-8">{c.accordion(R, FAQ, "faq")}</div>
-<aside class="col-lg-4"><div class="side">{side_cta(R)}<div class="side-card glass-strong"><h2>Explore</h2><ul class="side-nav"><li><a href="{R}services.html"><i class="bi bi-grid" aria-hidden="true"></i>Our services</a></li><li><a href="{R}about.html"><i class="bi bi-info-circle" aria-hidden="true"></i>About us</a></li><li><a href="{R}insights.html"><i class="bi bi-journal-text" aria-hidden="true"></i>Insights</a></li></ul></div></div></aside>
+<aside class="col-lg-4"><div class="side">{side_cta(R)}<div class="side-card glass-strong"><h2>Explore</h2><ul class="side-nav"><li><a href="{R}services.html"><i class="bi bi-grid" aria-hidden="true"></i>Our Services</a></li><li><a href="{R}about.html"><i class="bi bi-info-circle" aria-hidden="true"></i>About Us</a></li><li><a href="{R}insights.html"><i class="bi bi-journal-text" aria-hidden="true"></i>Insights</a></li></ul></div></div></aside>
 </div></div></section>"""
 
 
@@ -288,7 +288,7 @@ def _center(R, chip, title, lead, buttons):
 
 def not_found(ctx, R):
     return _center(R, "Error 404", "Page not found", "Sorry, the page you are looking for does not exist or has been moved.",
-                   f'<a class="btn btn-blue" href="{R}index.html">Back to home</a><a class="btn btn-glass" href="{R}services.html">Our services</a><a class="btn btn-glass" href="{R}contact.html">Contact us</a>')
+                   f'<a class="btn btn-blue" href="{R}index.html">Back to home</a><a class="btn btn-glass" href="{R}services.html">Our Services</a><a class="btn btn-glass" href="{R}contact.html">Contact Us</a>')
 
 
 def thanks(ctx, R):

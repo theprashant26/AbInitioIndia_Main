@@ -31,7 +31,7 @@ def fix(s):
         s = s.replace(a, b)
     return s
 
-PHONE_DISPLAY = "+011-40393888"
+PHONE_DISPLAY = "+91-11-40393888"
 PHONE_TEL = "+911140393888"
 EMAIL = "mail@abinitioindia.com"
 WHATSAPP = "https://wa.me/918800808022"
@@ -101,7 +101,7 @@ ABOUT = {
         "Our Business Growth consultants are adept at analyzing your needs to develop targeted and high impact business interventions, and deploying solutions to close the strategy execution gap, producing measurable bottom line results.",
         "We help organizations across the public, private, and social sectors with the sole objective to create the change which truly matters the most to them.",
     ],
-    "stats": [("186%", "Cumulative increase in businesses of our clients"), ("8470", "Hours of expert business advises provided"), ("270", "Business benefited from our services over years")],
+    "stats": [("186%", "Cumulative increase in businesses of our clients"), ("8470", "Hours of expert business advises provided"), ("270", "Businesses have benefited from our services over the years")],
     "philosophy_kicker": "The difference",
     "philosophy_h": "Our philosophy",
     "philosophy": [
@@ -299,7 +299,7 @@ CONTACT = {
     "h": "Get in touch",
     "lead": "Business advisory in Compliances, Legal, Regulatory, Corporate Laws, Funding &amp; Investment is our Forte. We provide solutions which are time tested. We believe in solutions rather than stretching the issues. We are your advisor, friend and partner to your success.",
     "intro": "Contact our office to help us fully understand the nature of your business and provide you with the solutions which meet your business requirements.",
-    "phones": [("Landline", "+011-40393888", "+911140393888"), ("Contact", "+91 8800 808 022", "+918800808022"), ("Contact", "+91 8800 808 033", "+918800808033")],
+    "phones": [("Landline", "+91-11-40393888", "+911140393888"), ("Contact", "+91 8800 808 022", "+918800808022"), ("Contact", "+91 8800 808 033", "+918800808033")],
     "hours": ("9:00 AM to 6:00 PM", "Monday to Saturday"),
     "offices": [("New Delhi", "1011B, 10th Floor, Indraprakash Building,<br>21 Barakhamba Road, New Delhi – 110001"),
                 ("New Delhi", "C 208, LGF, Defence Colony,<br>New Delhi – 110024"),
