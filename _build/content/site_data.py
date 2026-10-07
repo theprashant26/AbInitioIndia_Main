@@ -38,6 +38,9 @@ WHATSAPP = "https://wa.me/918800808022"
 SOCIAL = [("https://www.linkedin.com/company/abinitioindia", "LinkedIn", "bi-linkedin"), ("https://twitter.com/abinitioindia", "X (Twitter)", "bi-twitter-x"),
           ("https://www.facebook.com/abinitioindia", "Facebook", "bi-facebook"), ("https://www.instagram.com/abinitioindia/", "Instagram", "bi-instagram")]
 
+# Sister firm's website, linked from the main menu and the footer (opens in a new tab)
+LEGAL_SITE = ("Ab Initio Legal", "http://www.abinitiolegal.in/")
+
 # Client logos already in every theme's assets/img
 CLIENTS = [("c-bses.jpg", "BSES Rajdhani"), ("c-iifl.jpg", "IIFL"), ("c-panasonic.jpg", "Panasonic"), ("c-radico.jpg", "Radico Khaitan"),
            ("c-cfs.jpg", "Centre for Sight"), ("c-bk.png", "Burger King"), ("c-airworks.png", "Air Works"), ("c-nawadco.jpg", "Nawadco"),

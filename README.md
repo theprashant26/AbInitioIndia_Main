@@ -45,6 +45,7 @@ All `.html` files, `sitemap.xml`, `robots.txt` and `.htaccess` are build output:
 | `clients_src/` | Client logos (source files) |
 | `main_glass.js` | Site JavaScript (menu, reveals, insights filter, form validation, parallax…) |
 | `structured_data.py` | JSON-LD: ProfessionalService (home, about, contact) and Article (every insight), built from `site_data.py` |
+| `brand.py` | Logo (`assets/img/logo.png`/`.webp`), favicons and `favicon.ico`, generated from `content/img/brand/logo-source.png` |
 | `sitemap.py` | Writes `sitemap.xml` and `robots.txt` from the page list |
 | `redirects.csv` | Old WordPress URL → new page (83 rows; `exact` or `prefix` match) |
 | `redirects.py` | Writes `.htaccess` and `_build/nginx-redirects.conf` from `redirects.csv` |
@@ -66,6 +67,9 @@ python _build/purge.py .           # 3. only if you used new Bootstrap classes, 
 * New team member: add an entry to `TEAM` in `_build/content/site_data.py`, put a 600×500 JPG on
   a white background in `_build/content/img/team/<slug>.jpg`, add it to `img-manifest.json`, rebuild.
 * Absolute URLs (canonical, og:url, JSON-LD, sitemap) come from `BASE_URL` in `_build/gen.py`.
+* New logo: replace `_build/content/img/brand/logo-source.png` (logo on a white background is fine; the
+  white is made transparent) and rebuild.
+* The "Ab Initio Legal" link (main menu, mobile menu, footer) comes from `LEGAL_SITE` in `site_data.py`.
 * After a build, `git status` should list only the pages you meant to change.
 
 ## Redirects from the old site

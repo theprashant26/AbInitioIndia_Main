@@ -6,6 +6,7 @@ import redirects
 import structured_data
 import critical
 import sitemap
+import brand
 from gen import POSTS, LEGAL_HTML, post_body, Images, write, fmt_date, esc, MANIFEST, REPO
 
 S = os.path.dirname(os.path.abspath(__file__))
@@ -108,7 +109,7 @@ def shell(T, skin, page):
 <meta property="og:url" content="{esc(url)}">
 <meta property="og:image" content="{esc(og)}">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="{R}assets/img/logo.png">{skin_head(skin, R, page)}
+<link rel="icon" href="{R}favicon.ico" sizes="any"><link rel="icon" type="image/png" href="{R}assets/img/favicon-192.png"><link rel="apple-touch-icon" href="{R}assets/img/apple-touch-icon.png">{skin_head(skin, R, page)}
 {default_assets(skin, R, preload)}{page.get("jsonld", "")}
 </head>
 <body class="{page.get('body_cls', 'page-inner')}">
@@ -196,7 +197,7 @@ def build(key):
         html = html.replace(CRITICAL_SLOT, "<style>" + crit.css(html, R) + "</style>", 1).replace(LCP_SLOT, lcp_preload(html), 1)
         icons |= critical.icons_used(html, T.dir)
         write(os.path.join(T.dir, p["path"]), html)
-    img.copy(); img.copy_variants(); client_logos(T)
+    img.copy(); img.copy_variants(); client_logos(T); brand.build(T.dir)
     shutil.copyfile(os.path.join(S, "ScrollTrigger.min.js"), os.path.join(T.dir, "assets", "vendor", "ScrollTrigger.min.js"))
     critical.build_icon_font(T.dir, icons | critical.icons_used(crit.js, T.dir))
     if hasattr(skin, "post_build"):

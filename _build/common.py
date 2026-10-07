@@ -6,6 +6,7 @@ from site_data import *  # noqa
 e = lambda s: html.escape(s, quote=True)
 AC = ' aria-current="page"'
 EXT = ' target="_blank" rel="noopener"'  # links that leave the site (WhatsApp, social) open in a new tab
+NEW_TAB = '<span class="visually-hidden"> (opens in a new tab)</span><i class="bi bi-box-arrow-up-right ext-ico" aria-hidden="true"></i>'
 NAV = [("About us", [("About", "about.html"), ("Our team", "team.html"), ("Our mentors", "mentors.html")]),
        ("Our services", "services.html"), ("Insights", "insights.html"), ("Contact us", "contact.html")]
 ABOUT_GROUP = ("about.html", "team.html", "mentors.html")
@@ -31,18 +32,21 @@ def header(R, current, cta_label, cta_cls, variant=""):
             exact = target == current
             items.append(f'<li class="nav-item"><a class="nav-link{" active" if on else ""}" href="{R}{target}"{AC if exact else ""}>{label}</a></li>')
             mitems.append((label, target))
+    legal_label, legal_url = LEGAL_SITE
+    items.append(f'<li class="nav-item"><a class="nav-link nav-ext" href="{legal_url}"{EXT}>{legal_label}{NEW_TAB}</a></li>')
     mlinks = "".join(f'<li><a href="{R}{h}"{AC if h == current else ""}>{t}</a></li>' for t, h in mitems)
+    mlinks += f'<li><a href="{legal_url}"{EXT}>{legal_label}{NEW_TAB}</a></li>'
     return f"""<a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header {variant}" data-header>
 <div class="container-xl"><nav class="nav-bar" aria-label="Main">
-<a class="brand" href="{R}index.html"><img src="{R}assets/img/logo.png" alt="Ab Initio India – Business Enabler" width="150" height="71"></a>
+<a class="brand" href="{R}index.html"><img src="{R}assets/img/logo.webp" alt="Ab Initio India – Legal, Regulatory, Strategy" width="513" height="184"></a>
 <ul class="nav-links">{"".join(items)}</ul>
 <a class="btn {cta_cls} nav-cta" href="{R}contact.html">{cta_label}</a>
 <button class="menu-btn" type="button" data-menu-open aria-expanded="false" aria-controls="mobileMenu"><span class="visually-hidden">Open menu</span><i class="bi bi-list" aria-hidden="true"></i></button>
 </nav></div>
 </header>
 <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
-<div class="mobile-menu-top"><a class="brand" href="{R}index.html"><img src="{R}assets/img/logo.png" alt="Ab Initio India – home" width="150" height="71"></a>
+<div class="mobile-menu-top"><a class="brand" href="{R}index.html"><img src="{R}assets/img/logo.webp" alt="Ab Initio India – home" width="513" height="184"></a>
 <button class="menu-close" type="button" data-menu-close><span class="visually-hidden">Close menu</span><i class="bi bi-x-lg" aria-hidden="true"></i></button></div>
 <ul class="mobile-links">{mlinks}</ul>
 <div class="mobile-menu-foot"><a class="btn {cta_cls}" href="{R}contact.html">{cta_label}</a><a href="tel:{PHONE_TEL}"><i class="bi bi-telephone" aria-hidden="true"></i> {PHONE_DISPLAY}</a><a href="mailto:{EMAIL}"><i class="bi bi-envelope" aria-hidden="true"></i> {EMAIL}</a></div>
@@ -61,10 +65,10 @@ def footer(R, cta_btn_cls, cta_panel_cls="glass-strong", extra_cls=""):
 </div>
 <div class="footer-main"><div class="container-xl">
 <div class="footer-grid">
-<div class="footer-brand"><a class="brand" href="{R}index.html"><img src="{R}assets/img/logo.png" alt="Ab Initio India" width="150" height="71" loading="lazy"></a>
+<div class="footer-brand"><a class="brand" href="{R}index.html"><img src="{R}assets/img/logo.webp" alt="Ab Initio India" width="513" height="184" loading="lazy"></a>
 <p>1011B, 10th Floor, Indraprakash Building,<br>21 Barakhamba Road, New Delhi – 110001</p></div>
 <div><h2 class="footer-h">Contact</h2><ul><li><a href="tel:{PHONE_TEL}"><i class="bi bi-telephone" aria-hidden="true"></i> {PHONE_DISPLAY}</a></li><li><a href="mailto:{EMAIL}"><i class="bi bi-envelope" aria-hidden="true"></i> {EMAIL}</a></li><li><a href="{WHATSAPP}"{EXT}><i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp</a></li></ul></div>
-<div><h2 class="footer-h">Company</h2><ul><li><a href="{R}about.html">About</a></li><li><a href="{R}team.html">Our team</a></li><li><a href="{R}services.html">Services</a></li><li><a href="{R}insights.html">Insights</a></li><li><a href="{R}faq.html">FAQ</a></li></ul></div>
+<div><h2 class="footer-h">Company</h2><ul><li><a href="{R}about.html">About</a></li><li><a href="{R}team.html">Our team</a></li><li><a href="{R}services.html">Services</a></li><li><a href="{R}insights.html">Insights</a></li><li><a href="{R}faq.html">FAQ</a></li><li><a href="{LEGAL_SITE[1]}"{EXT}>{LEGAL_SITE[0]}{NEW_TAB}</a></li></ul></div>
 <div><h2 class="footer-h">Legal</h2><ul>{legal}</ul></div>
 </div>
 <div class="footer-bottom"><span>© 2026 Ab Initio India LLP. All rights reserved.</span><span class="social">{social}</span></div>

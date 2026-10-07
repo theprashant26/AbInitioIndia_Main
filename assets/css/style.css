@@ -95,6 +95,7 @@ a{color:var(--blue);text-decoration:none}a:hover{color:var(--blue-d)}
 .nav-link{font-weight:600;font-size:.95rem;color:var(--navy);padding:.55rem 1rem!important;border-radius:999px}
 .nav-link:hover,.nav-link:focus-visible{color:var(--blue);background:rgba(21,82,161,.08)}
 .nav-link.active{color:var(--blue);background:rgba(21,82,161,.1)}
+.ext-ico{font-size:.68em;margin-left:.4em;opacity:.65}  /* "opens in a new tab" arrow on links to other sites */
 .nav-cta{padding:.65rem 1.2rem}
 .glass-menu{border-radius:18px;padding:.5rem;margin-top:10px!important;background:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.85);box-shadow:var(--shadow);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
 .glass-menu .dropdown-item{border-radius:10px;font-weight:600;color:var(--navy);padding:.55rem .9rem}
