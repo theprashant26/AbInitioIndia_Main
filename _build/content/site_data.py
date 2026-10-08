@@ -135,11 +135,11 @@ ABOUT = {
 # ---------------------------------------------------------------- Team
 TEAM_INTRO = ("True partners to your success", "Our team is comprised of genuinely gifted minds. Our expertise across diverse practice areas and sectors covers varied and nuanced needs.")
 TEAM = [
-    ("amit-manchanda", "Mr. Amit Manchanda", "Founder &amp; Managing Partner", None, [
+    ("amit-manchanda", "Amit Manchanda", "Founder &amp; Managing Partner", None, [
         "Amit Manchanda is specialised hand in Corporate Advisory and Business Consulting. He has worked with top most corporates of the country before starting his dream venture.",
         "Mr. Amit Manchanda is a law graduate &amp; fellow member of ICSI.",
         "He carries more than 20 years of corporate experience in handling a variety of assignments in Arbitration, Corporate &amp; Legal Compliances, Trade Marks Infringements &amp; Protections, Joint Ventures documentation, Takeover of Financial Assets, etc."]),
-    ("ateev-kapoor", "Mr. Ateev Kapoor", "Partner", None, [
+    ("ateev-kapoor", "Ateev Kapoor", "Partner", None, [
         "Ateev is a partner at Ab Initio and has more than 15 years in the field of Strategic Assignments, Corporate Affairs, Business Advocacy, Client Relationship Management, and Business Development, Legal Advisory.",
         "Ateev Kapoor is MBA from Cardiff University, UK with more than 15 years of PQE in the field of Strategic Assignments, Corporate Affairs, Business Advocacy, Client Relationship Management and Business Development, Legal Advisory. He has worked with esteemed organizations in the field of Assets Reconstruction, Real Estate, Consulting &amp; Finance."]),
     ("shaily-chauhan", "Shaily Chauhan", "Associate Partner", None, [
